@@ -1,0 +1,289 @@
+# SNAKE GAME
+
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import random
+
+root = tk.Tk()
+root.title("Snake Game")
+root.configure(bg="light green")
+
+
+def start():
+    global variable, apple, score
+    #for arrow precision
+    variable = 0
+    
+    #game variables
+    score = 0
+    grid_limitx=40
+    grid_limity=25
+    speed = 100
+
+
+    #root.maxsize(width=grid_limitx*26, height=grid_limity*30)
+    #root.minsize(width=grid_limitx*26, height=grid_limity*30)
+
+    #grid system visualization
+    for i in range(grid_limitx):
+        l = Button(root, text=i, width=2, height=1, bg="grey")
+        l.grid(row=grid_limity, column=i)
+        
+        l = Button(root, text=i, width=2, height=1, bg="grey")
+        l.grid(row=0, column=i)
+    for i in range(grid_limity):
+        l = Button(root, text=i, width=2, height=1, bg="grey")
+        l.grid(row=i, column=0)
+        
+        l = Button(root, text=i+1, width=2, height=1, bg="grey")
+        l.grid(row=i+1, column=grid_limitx)
+        
+        
+    '''
+    for i in range(len(word)):
+        if i%2==0:
+            l = Button(root, text=word[i], width=2, height=1, bg="dark green")
+            l.grid(row=i+1, column=grid_limit, sticky=E)
+        else:
+            l = Button(root, text=word[i], width=2, height=1, bg="green")
+            l.grid(row=i+1, column=11, sticky=E)
+    '''
+    #starting btn
+    btn = Button(root, text="  :", bg="dark green", width=2)
+    btn.grid(row=grid_limity//2, column=grid_limitx//2)
+    
+    def score_update():
+        global scr_l
+        root.title("Snake Game"+" "*grid_limitx+"Score: "+str(score))
+        '''
+        scr_l = Label(root, text="Score: "+str(score), bg="yellow")
+        scr_l.grid(row=0, column=11)
+        '''
+    score_update()
+
+    #apple poition
+    apple_pos = [(i, j) for i in range(1, grid_limity-1) for j in range(1, grid_limitx-1)]
+    random.shuffle(apple_pos)
+
+    #lists
+    bodies = [] #snake bodies
+    body_pos = [] #position for bodies
+    current = [] #current apple position
+
+    #apple
+    apple = Button(root, text="", bg="red", width=2)
+    apple.grid(row=apple_pos[0][0], column=apple_pos[0][1])
+    current.append((apple.grid_info()["row"], apple.grid_info()["column"]))
+    #messagebox.showinfo("Notification", "Snake Game\nBy Allen J")
+    #eat
+    def eat():
+        global apple,score
+        #if snake head position in current apple position
+        if (btn.grid_info()["row"], btn.grid_info()["column"]) in current:
+            apple.destroy()
+            
+            score+=1
+            #scr_l.destroy()
+            score_update()
+            current.clear()
+            
+            #adding a body
+            
+            if len(bodies)%2==0:
+                btn1 = Button(root, text="  ", bg="green", width=2)
+                btn1.grid(row=body_pos[0][0], column=body_pos[0][1])
+                bodies.append(btn1)
+            else:
+                btn1 = Button(root, text="  ", bg="dark green", width=2)
+                btn1.grid(row=body_pos[0][0], column=body_pos[0][1])
+                bodies.append(btn1)
+            print(len(bodies))
+            
+            #random apple position
+            apple = Button(root, text="", bg="red", width=2)
+            random.shuffle(apple_pos)
+
+            #to check if apple position in snake body position
+            def check():
+                if (apple_pos[0][0], apple_pos[0][1]) in body_pos:
+                    random.shuffle(apple_pos)
+                    check()
+                else:
+                    apple.grid(row=apple_pos[0][0], column=apple_pos[0][1])
+            check()
+            current.append((apple.grid_info()["row"], apple.grid_info()["column"]))
+        else:
+            #removing the unnecessary body position(snake body wont use this)
+            body_pos.pop(0)
+
+    #left arrow
+    def left_arrow(event):
+        global variable
+        variable=1
+        def left():
+            if variable==1:
+                print("left")
+                btn.configure(text=":  ")
+
+                #if snake head not touching border and snake body
+                if btn.grid_info()["column"]-1>=1 and (btn.grid_info()["row"], btn.grid_info()["column"]-1) not in body_pos:
+                    btn.grid_configure(row=btn.grid_info()["row"], column=btn.grid_info()["column"]-1)
+                    body_pos.append((btn.grid_info()["row"], btn.grid_info()["column"]))
+                    
+                    #each snake body to move in previous position of previous snake body
+                    for i in range(len(bodies)):
+                        bodies[i].grid_configure(row=body_pos[-(i+2)][0], column=body_pos[ -(i+2)][1])
+                    print(body_pos)
+
+                    #if left arrow pressed, cannot press again, cannot press right arrow, can only press up and down arrows
+                    if variable==1:
+                        root.bind('<Down>', down_arrow)
+                        root.bind('<Up>', up_arrow)
+                        root.unbind('<Left>')
+                        root.unbind('<Right>')
+
+                        root.after(speed, left)
+                    else:
+                        root.bind('<Left>', left_arrow)
+                        root.bind('<Right>', right_arrow)
+                else:
+                    print("Lose!")
+                    restart()
+                eat()
+        left()
+
+    #right arrow
+    def right_arrow(event):
+        global variable
+        variable=2
+        def right():
+            if variable==2:   
+                print("right")
+                btn.configure(text="  :")
+
+                #if snake head not touching border and snake body
+                if btn.grid_info()["column"]+1<=grid_limitx-1 and (btn.grid_info()["row"], btn.grid_info()["column"]+1) not in body_pos:
+                    btn.grid_configure(row=btn.grid_info()["row"], column=btn.grid_info()["column"]+1)
+                    body_pos.append((btn.grid_info()["row"], btn.grid_info()["column"]))
+
+                    #each snake body to move in previous position of previous snake body
+                    for i in range(len(bodies)):
+                        bodies[i].grid_configure(row=body_pos[-(i+2)][0], column=body_pos[-(i+2)][1])
+                    print(body_pos)
+
+                    #if right arrow pressed, cannot press again, cannot press left arrow, can only press up and down arrows
+                    if variable==2:
+                        root.bind('<Down>', down_arrow)
+                        root.bind('<Up>', up_arrow)
+                        root.unbind('<Right>')
+                        root.unbind('<Left>')
+
+                        root.after(speed, right)
+                    else:
+                        root.bind('<Right>', right_arrow)
+                        root.bind('<Left>', left_arrow)
+                else:
+                    print("Lose!")
+                    restart()
+                eat()
+        right()
+
+    #up arrow
+    def up_arrow(event):
+        global variable
+        variable=3
+        def up():
+            if variable==3:
+                print("up")
+                btn.configure(text="..")
+
+                #if snake head not touching border and snake body
+                if btn.grid_info()["row"]-1>=1 and (btn.grid_info()["row"]-1, btn.grid_info()["column"]) not in body_pos:
+                    btn.grid_configure(row=btn.grid_info()["row"]-1, column=btn.grid_info()["column"])
+                    body_pos.append((btn.grid_info()["row"], btn.grid_info()["column"]))
+
+                    #each snake body to move in previous position of previous snake body
+                    for i in range(len(bodies)):
+                        bodies[i].grid_configure(row=body_pos[-(i+2)][0], column=body_pos[-(i+2)][1])
+                    
+                    #if up arrow pressed, cannot press again, cannot press down arrow, can only press left and right arrows
+                    if variable==3:
+                        root.unbind('<Up>')
+                        root.unbind('<Down>')
+                        root.bind('<Left>', left_arrow)
+                        root.bind('<Right>', right_arrow)
+
+                        root.after(speed, up)
+                    else:
+                        root.bind('<Up>', up_arrow)
+                        root.bind('<Down>', down_arrow)
+                    print(body_pos) 
+                else:
+                    print("Lose!")
+                    restart()
+                eat()
+        up()
+
+    #down arrow
+    def down_arrow(event):
+        global variable
+        variable=4
+        def down():
+            if variable==4:
+                print("down")
+                btn.configure(text="..")
+
+                #if snake head not touching border and snake body
+                if btn.grid_info()["row"]+1<=grid_limity-1 and (btn.grid_info()["row"]+1, btn.grid_info()["column"]) not in body_pos:
+                    btn.grid_configure(row=btn.grid_info()["row"]+1, column=btn.grid_info()["column"])
+                    body_pos.append((btn.grid_info()["row"], btn.grid_info()["column"]))
+
+                    #each snake body to move in previous position of previous snake body
+                    for i in range(len(bodies)):
+                        bodies[i].grid_configure(row=body_pos[-(i+2)][0], column=body_pos[-(i+2)][1])
+
+                    #if down arrow pressed, cannot press again, cannot press up arrow, can only press left and right arrows
+                    if variable==4:
+                        root.unbind('<Down>')
+                        root.unbind('<Up>')
+                        root.bind('<Left>', left_arrow)
+                        root.bind('<Right>', right_arrow)
+
+                        root.after(speed, down)
+                    else:
+                        root.bind('<Down>', down_arrow)
+                        root.bind('<Up>', up_arrow)
+                    print(body_pos) 
+                else:
+                    print("Lose!")
+                    restart()
+                eat()
+        down()
+    
+    def restart():
+        messagebox.showinfo("Notification", "Game Over \nScore: "+str(score))
+        btn.destroy()
+        apple.destroy()
+        
+        for body in bodies:
+            body.destroy()
+        bodies.clear()
+        body_pos.clear()
+        current.clear()
+        start()
+
+    def pause(event):
+        global variable
+        variable=0
+        messagebox.showinfo("Notification", "Game Paused")
+
+    #binding root to the arrow keys
+    root.bind('<Left>', left_arrow)
+    root.bind('<Right>', right_arrow)
+    root.bind('<Up>', up_arrow)
+    root.bind('<Down>', down_arrow)
+    root.bind('<p>', pause)   
+start()
+
+root.mainloop()
