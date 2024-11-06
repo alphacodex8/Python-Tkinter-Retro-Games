@@ -1,0 +1,383 @@
+import tkinter as tk
+from tkinter import *
+import random
+
+root = tk.Tk()
+lines=0
+def update():
+    root.title("Tetris"+(" "*10)+"Lines: "+ str(lines))
+update()
+root.configure(bg="black")
+
+#border
+for i in range(22):
+    bd = Button(root, bg="grey", width=2)
+    bd.grid(row=i, column=0)
+    bd = Button(root, bg="grey", width=2)
+    bd.grid(row=i, column=12)
+for i in range(11):
+    bd = Button(root, bg="grey", width=2)
+    bd.grid(row=0, column=i)
+    bd = Button(root, bg="grey", width=2)
+    bd.grid(row=21, column=i)
+
+blk_lst = ["ln", "ll", "rl", "sq", "s", "z", "t"]
+pos = []
+btns = []
+notpos = []
+notbtns = []
+
+time = 1000
+
+def choice():
+    global blks, blk, blk_lst
+
+    blk = random.choice(blk_lst)
+
+    #to ensure different block after every line cleared
+    if len(blk_lst)>=2:
+        blk_lst.remove(blk)
+    else:
+        blk_lst = ["ln", "ll", "rl", "sq", "s", "z", "t"]
+    blks = []
+
+    if blk=="ln": #line
+        for i in range(4):
+            l = Button(root, bg="cyan", width=2)
+            l.grid(row=1, column=4+i)
+            blks.append(l)
+
+    elif blk=="ll": #left 'L'
+        for i in range(3):
+            ll = Button(root, bg="blue", width=2)
+            ll.grid(row=1+i, column=6)
+            blks.append(ll)
+        ll = Button(root, bg="blue", width=2)
+        ll.grid(row=3, column=5)
+        blks.append(ll)
+
+    elif blk=="rl": #right 'L'
+        for i in range(3):
+            rl = Button(root, bg="orange", width=2)
+            rl.grid(row=1+i, column=5)
+            blks.append(rl)
+        rl = Button(root, bg="orange", width=2)
+        rl.grid(row=3, column=6)
+        blks.append(rl)
+
+    elif blk=="sq": #square
+        for i in range(2):
+            sq = Button(root, bg="yellow", width=2)
+            sq.grid(row=i+1, column=5)
+            blks.append(sq)
+        for i in range(2):
+            sq = Button(root, bg="yellow", width=2)
+            sq.grid(row=i+1, column=6)
+            blks.append(sq)
+
+    elif blk=="s": #'S'
+        for i in range(2):
+            s = Button(root, bg="green", width=2)
+            s.grid(row=i+1, column=5)
+            blks.append(s)
+        for i in range(2):
+            s = Button(root, bg="green", width=2)
+            s.grid(row=i+2, column=6)
+            blks.append(s)
+
+    elif blk=="z": #'Z'
+        for i in range(2):
+            z = Button(root, bg="red", width=2)
+            z.grid(row=i+1, column=6)
+            blks.append(z)
+        for i in range(2):
+            z = Button(root, bg="red", width=2)
+            z.grid(row=i+2, column=5)
+            blks.append(z)
+
+    elif blk=="t": #'T'
+        for i in range(3):
+            t = Button(root, bg="purple", width=2)
+            t.grid(row=1+i, column=5)
+            blks.append(t)
+        t = Button(root, bg="purple", width=2)
+        t.grid(row=2, column=6)
+        blks.append(t)
+    
+choice()
+
+#to check if all spots filled in a single row
+
+l_check = 0 #var to check if line formed
+
+def line_check():
+    global l_check, btns, pos, notpos, notbtns, time, lines
+
+    for i in range(1, 21): #rows
+        for j in range(1, 11): #columns
+            if (i,j) not in pos:
+                l_check=0
+                break
+            else:
+                l_check=1
+
+        if l_check==1:
+            print("LINE!")
+            
+            lines+=1
+            time-=50
+            update()
+            print("ORIGINAL POS: ", pos)
+            
+            #positions to be deleted
+            for p in range(len(pos)):
+                for y in range(1,11):
+                    if pos[p]==(i,y):
+                        notpos.append(p)
+            
+            #remaining positions
+            for y in range(1,11):
+                pos = [x for x in pos if x!=(i,y)]
+            
+            '''
+            print("AFTER REMOVAL POS: ",pos)
+            print("REMOVED POS:",notpos)  
+
+            print("BEFORE DEL BTNS LENGTH:",len(btns))
+            
+            print("BTNS BEFORE DEL: ", btns)
+            '''
+
+            #buttons to be deleted
+            for no in notpos:
+                notbtns.append(btns[no])
+            
+            #remaining buttons
+            for no in notbtns:
+                btns = [b for b in btns if b!=no]
+                
+            '''
+            print("AFTER DEL BTNS LENGTH: ",len(btns))
+
+            print("BTNS AFTER DEL: ", btns)
+            print("BTNS TO BE DEL: ", notbtns)
+            '''
+
+            #deleting a row
+            for notbtn in notbtns:
+                notbtn.destroy()
+            notbtns.clear()
+            
+            #shifting rows down
+            for btn in btns:
+                if btn.grid_info()["row"]<i and btn.grid_info()["row"]+1!=21:
+                    btn.grid_configure(row=btn.grid_info()["row"]+1)
+
+            l_check=0
+
+            notpos.clear()
+
+            #updating positions after down shift
+            pos.clear()
+ 
+            for btn in btns:
+                pos.append((btn.grid_info()["row"],btn.grid_info()["column"]))
+            
+#down loop
+check=0
+def down_loop():
+    global blks, check, turn_count, btns, time
+
+    for i in range(len(blks)):
+        if blks[i].grid_info()["row"]+1==21 or (blks[i].grid_info()["row"]+1, blks[i].grid_info()["column"]) in pos:
+            check+=1
+            break
+    if check==0:
+        for i in range(len(blks)):
+            blks[i].grid_configure(row=blks[i].grid_info()["row"]+1)
+    else:
+        check=0
+        for blk in blks:
+            pos.append((blk.grid_info()["row"], blk.grid_info()["column"]))
+            btns.append(blk)
+        line_check()
+        choice()
+        
+        turn_count=0
+    root.after(time, down_loop)
+down_loop()
+
+def down(event):
+    global blks, check, turn_count, btns
+
+    for i in range(len(blks)):
+        if blks[i].grid_info()["row"]+1==21 or (blks[i].grid_info()["row"]+1, blks[i].grid_info()["column"]) in pos:
+            check+=1
+            break
+    if check==0:
+        for i in range(len(blks)):
+            blks[i].grid_configure(row=blks[i].grid_info()["row"]+1)
+    else:
+        check=0
+        for blk in blks:
+            pos.append((blk.grid_info()["row"], blk.grid_info()["column"]))
+            btns.append(blk)
+        line_check()
+        choice()
+        
+        turn_count=0
+check_l = 0
+def left(event):
+    global check_l
+    for i in range(len(blks)):
+        if blks[i].grid_info()["column"]-1==0 or (blks[i].grid_info()["row"], blks[i].grid_info()["column"]-1) in pos:
+            check_l+=1
+            break
+    if check_l==0:
+        for i in range(len(blks)):
+            blks[i].grid_configure(column=blks[i].grid_info()["column"]-1)
+    else:
+        check_l=0
+
+check_r = 0
+def right(event):
+    global check_r
+    for i in range(len(blks)):
+        if blks[i].grid_info()["column"]+1==11 or (blks[i].grid_info()["row"], blks[i].grid_info()["column"]+1) in pos:
+            check_r+=1
+            break
+    if check_r==0:
+        for i in range(len(blks)):
+            blks[i].grid_configure(column=blks[i].grid_info()["column"]+1)
+    else:
+        check_r=0
+
+#turning the tetrominoes clockwise
+turn_count = 0
+def turn(event):
+    global blk, turn_count, blks
+    turn_count+=1
+    if blk=="ln":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+2)
+            blks[1].grid_configure(row=blks[1].grid_info()["row"], column=blks[1].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"])
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+2, column=blks[3].grid_info()["column"]-1)
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+2, column=blks[0].grid_info()["column"]+1)
+            blks[1].grid_configure(row=blks[1].grid_info()["row"]+1, column=blks[1].grid_info()["column"])
+            blks[2].grid_configure(row=blks[2].grid_info()["row"], column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-1, column=blks[3].grid_info()["column"]-2)
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-2)
+            blks[1].grid_configure(row=blks[1].grid_info()["row"], column=blks[1].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"])
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-2, column=blks[3].grid_info()["column"]+1)
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-2, column=blks[0].grid_info()["column"]-1)
+            blks[1].grid_configure(row=blks[1].grid_info()["row"]-1, column=blks[1].grid_info()["column"])
+            blks[2].grid_configure(row=blks[2].grid_info()["row"], column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+1, column=blks[3].grid_info()["column"]+2)
+            turn_count=0
+
+    elif blk=="ll":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-2, column=blks[3].grid_info()["column"])
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]+2)
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+2, column=blks[3].grid_info()["column"])
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]-2)
+            turn_count=0
+    
+    elif blk=="rl":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]-2)
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-2, column=blks[3].grid_info()["column"])
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]+2)
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+2, column=blks[3].grid_info()["column"])
+            turn_count=0
+
+    elif blk=="s":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]-2)
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-2, column=blks[3].grid_info()["column"])
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]+2)
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+2, column=blks[3].grid_info()["column"])
+            turn_count=0
+    
+    elif blk=="z":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-2, column=blks[3].grid_info()["column"])
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]+2)
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+2, column=blks[3].grid_info()["column"])
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"], column=blks[3].grid_info()["column"]-2)
+            turn_count=0
+
+    elif blk=="t":
+        if turn_count==1:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+1, column=blks[3].grid_info()["column"]-1)
+        elif turn_count==2:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]+1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]-1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-1, column=blks[3].grid_info()["column"]-1)
+        elif turn_count==3:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]-1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]+1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]-1, column=blks[3].grid_info()["column"]+1)
+        elif turn_count==4:
+            blks[0].grid_configure(row=blks[0].grid_info()["row"]-1, column=blks[0].grid_info()["column"]+1)
+            blks[2].grid_configure(row=blks[2].grid_info()["row"]+1, column=blks[2].grid_info()["column"]-1)
+            blks[3].grid_configure(row=blks[3].grid_info()["row"]+1, column=blks[3].grid_info()["column"]+1)
+            turn_count=0
+    
+root.bind("<Up>", turn)
+root.bind("<Down>", down)
+root.bind("<Left>", left)
+root.bind("<Right>", right)
+
+root.mainloop()
