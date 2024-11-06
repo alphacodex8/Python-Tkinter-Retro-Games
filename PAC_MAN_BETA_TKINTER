@@ -1,0 +1,889 @@
+import tkinter as tk
+from tkinter import *
+#from tkinter.messagebox import OK
+
+root = tk.Tk()
+root.title("PAC MAN VS1")
+root.geometry("610x800")
+root.configure(bg="black")
+
+#border
+
+bdr = []
+bdr_pos = []
+
+for i in range(19):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=0, column=i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=20, column=i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(1):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=16, column=1)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=16, column=17)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(6):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=i+1, column=0)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=i+1, column=18)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=18, column=2+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=18, column=11+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(7):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=13+i, column=0)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=13+i, column=18)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(2):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=2, column=2+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=1+i, column=9)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=2, column=15+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=4, column=15+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=4, column=2+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=5+i, column=9)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=6, column=6+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=6, column=11+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=7+i, column=3)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=7+i, column=15)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=9+i, column=7)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=9+i, column=11)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=13+i, column=9)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=11+i, column=3)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=11+i, column=15)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=14, column=2+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=14, column=15+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=15+i, column=3)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=15+i, column=15)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=17+i, column=9)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=16+i, column=5)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=16+i, column=13)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(3):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=2, column=5+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=2, column=11+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=6, column=1+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=6, column=15+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=8, column=0+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=8, column=16+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=10, column=8+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=10+i, column=5)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=10+i, column=13)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=12, column=0+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=12, column=16+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=14, column=5+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=14, column=11+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(5):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=4, column=7+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=4+i, column=5)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=4+i, column=13)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=8, column=7+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=12, column=7+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=16, column=7+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+for i in range(4):
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=10, column=0+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+    bf = Frame(root, bg="blue", bd=4)
+    bf.grid(row=10, column=15+i)
+    btn = Button(bf, width=2, bg="black")
+    btn.grid(row=0, column=0)
+    bdr.append(bf)
+
+#border pos
+for i in bdr:
+    bdr_pos.append((i.grid_info()["row"], i.grid_info()["column"]))
+
+#food
+not_lst = []
+
+for i in range(7):
+    for j in range(9):
+        not_lst.append((i+6,j+5))
+
+not_lst = not_lst + bdr_pos
+
+for i in range(3):
+    not_lst.append((7,i))
+    not_lst.append((11,i))
+    not_lst.append((9,15+i))
+
+for i in range(2):
+    not_lst.append((7,16+i))
+    not_lst.append((11,16+i))
+
+for i in range(4):
+    not_lst.append((9,i))
+
+not_lst.append((15,9)) #start pos
+
+food_lst = []
+
+for i in range(20):
+    for j in range(18):
+        if (i,j) not in not_lst:
+            foodf = Frame(root, bg="black", bd=4)
+            foodf.grid(row=i, column=j)
+            food = Button(foodf, width=2, bg="orange")
+            food.grid(row=0, column=0)
+            food_lst.append(foodf)
+
+path_pos = []
+path_pos.append((15,9))
+
+for i in range(4):
+    path_pos.append((9,i))
+    path_pos.append((9,15+i))
+
+for f in food_lst:
+    path_pos.append((f.grid_info()["row"],f.grid_info()["column"]))
+
+for i in range(7):
+    for j in range(9):
+        if (i+6,j+5) not in bdr_pos:
+            path_pos.append((i+6,j+5))
+
+pacf = Frame(root, bg="black", bd=4)
+pacf.grid(row=15, column=9)
+pac = Button(pacf, width=2, bg="yellow")
+pac.grid(row=0, column=0)
+
+def eat():
+    global food_lst
+    for f in food_lst:
+        if (pacf.grid_info()["row"], pacf.grid_info()["column"])==(f.grid_info()["row"], f.grid_info()["column"]):
+            f.destroy()
+            food_lst.remove(f)
+    if len(food_lst)==0:
+        print("WIN!")
+
+m_check = 0
+l_check = 0
+def left(event):
+    global m_check
+
+    m_check=1
+    def left_m():
+        global bdr, l_check, m_check
+
+        if m_check==1:
+            
+            for bd in bdr: 
+                if (pacf.grid_info()["row"], pacf.grid_info()["column"]-1) == (bd.grid_info()["row"], bd.grid_info()["column"]):
+                    l_check=1
+                    root.unbind("<Left>")
+                    
+            if l_check!=1:
+                root.bind("<Left>", left)
+
+                if (pacf.grid_info()["row"], pacf.grid_info()["column"]) == (9,0):
+                    pacf.grid_configure(column=18)
+                pacf.grid_configure(column=pacf.grid_info()["column"]-1)
+                eat()
+            root.unbind("<Left>")
+            root.bind("<Right>", right)
+            root.bind("<Up>", up)
+            root.bind("<Down>", down)
+            l_check=0
+            root.after(300, left_m)
+    left_m()
+
+r_check = 0
+def right(event):
+    global m_check
+
+    m_check=2
+    def right_m():
+        global bdr, r_check, m_check
+        
+        if m_check==2:
+            
+            for bd in bdr: 
+                if (pacf.grid_info()["row"], pacf.grid_info()["column"]+1) == (bd.grid_info()["row"], bd.grid_info()["column"]):
+                    r_check=1
+                    root.unbind("<Right>")
+
+            if r_check!=1:
+                root.bind("<Right>", right)
+
+                if (pacf.grid_info()["row"], pacf.grid_info()["column"]) == (9,18):
+                    pacf.grid_configure(column=0)
+                pacf.grid_configure(column=pacf.grid_info()["column"]+1)
+                eat()
+            root.unbind("<Right>")
+            root.bind("<Left>", left)
+            root.bind("<Up>", up)
+            root.bind("<Down>", down)
+            r_check=0
+            root.after(300, right_m)
+    right_m()
+
+u_check = 0
+def up(event):
+    global m_check
+
+    m_check=3
+    def up_m():
+        global bdr, u_check, m_check
+        
+        if m_check==3:
+            
+            for bd in bdr: 
+                if (pacf.grid_info()["row"]-1, pacf.grid_info()["column"]) == (bd.grid_info()["row"], bd.grid_info()["column"]):
+                    u_check=1
+                    root.unbind("<Up>")
+
+            if u_check!=1:
+                root.bind("<Up>", up)
+                pacf.grid_configure(row=pacf.grid_info()["row"]-1)
+                eat()
+            root.unbind("<Up>")
+            root.bind("<Left>", left)
+            root.bind("<Right>", right)
+            root.bind("<Down>", down)
+            u_check=0
+            root.after(300, up_m)
+    up_m()
+
+d_check = 0
+def down(event):
+    global m_check
+
+    m_check=4
+    def down_m():
+        global bdr, d_check, m_check
+        
+        if m_check==4:
+            
+            for bd in bdr: 
+                if (pacf.grid_info()["row"]+1, pacf.grid_info()["column"]) == (bd.grid_info()["row"], bd.grid_info()["column"]):
+                    d_check=1
+                    root.unbind("<Down>")
+
+            if d_check!=1:
+                root.bind("<Down>", down)
+                pacf.grid_configure(row=pacf.grid_info()["row"]+1)
+                eat()
+            root.unbind("<Down>")
+            root.bind("<Left>", left)
+            root.bind("<Right>", right)
+            root.bind("<Up>", up)
+            d_check=0
+            root.after(300, down_m)
+    down_m()
+
+#red ghost: Blinky
+
+redf = Frame(root, bg="black", bd=4)
+redf.grid(row=7, column=9)
+red = Button(redf, width=2, bg="red")
+red.grid(row=0, column=0)
+
+dist = 0
+
+pinkf = Frame(root, bg="black", bd=4)
+pinkf.grid(row=9, column=9)
+pink = Button(pinkf, width=2, bg="pink")
+pink.grid(row=0, column=0)
+'''
+redf = Frame(root, bg="black", bd=4)
+redf.grid(row=7, column=9)
+red = Button(redf, width=2, bg="red")
+red.grid(row=0, column=0)
+
+redf = Frame(root, bg="black", bd=4)
+redf.grid(row=7, column=9)
+red = Button(redf, width=2, bg="red")
+red.grid(row=0, column=0)
+'''
+u_checkr = 0
+d_checkr = 0
+l_checkr = 0
+r_checkr = 0
+
+u_checkd = 0
+d_checkd = 0
+l_checkd = 0
+r_checkd = 0
+
+s_check = 0
+n_check = 0
+e_check = 0
+w_check = 0
+
+target_pos = (pacf.grid_info()["row"],pacf.grid_info()["column"])
+red_pos = (redf.grid_info()["row"],redf.grid_info()["column"])
+
+target_var = target_pos
+red_var = target_pos
+
+
+def distance():
+    global dist
+
+    dist=0
+    if red_var!=target_var:
+        pass
+
+def south_func():
+    global u_checkr, d_checkr, l_checkr, r_checkr
+    redf.grid_configure(row=red_pos[0]+1)
+    u_checkr=1
+    l_checkr=0
+    r_checkr=0
+
+def east_func():
+    global u_checkr, d_checkr, l_checkr, r_checkr
+    redf.grid_configure(column=red_pos[1]+1)
+    l_checkr=1
+    u_checkr=0
+    d_checkr=0
+
+def west_func():
+    global u_checkr, d_checkr, l_checkr, r_checkr
+    redf.grid_configure(column=red_pos[1]-1)
+    r_checkr=1
+    u_checkr=0
+    d_checkr=0
+
+def north_func():
+    global u_checkr, d_checkr, l_checkr, r_checkr
+    redf.grid_configure(row=red_pos[0]-1)
+    d_checkr=1
+    l_checkr=0
+    r_checkr=0
+
+#########
+def south_f():
+    global u_checkd, d_checkd, l_checkd, r_checkd, dist
+    redf.grid_configure(row=red_pos[0]+1)
+    u_checkd=1
+    l_checkd=0
+    r_checkd=0
+    dist+=1
+
+def east_f():
+    global u_checkd, d_checkd, l_checkd, r_checkd, dist
+    redf.grid_configure(column=red_pos[1]+1)
+    l_checkd=1
+    u_checkd=0
+    d_checkd=0
+    dist+=1
+
+def west_f():
+    global u_checkd, d_checkd, l_checkd, r_checkd, dist
+    redf.grid_configure(column=red_pos[1]-1)
+    r_checkd=1
+    u_checkd=0
+    d_checkd=0
+    dist+=1
+
+def north_f():
+    global u_checkd, d_checkd, l_checkd, r_checkd, dist
+    redf.grid_configure(row=red_pos[0]-1)
+    d_checkd=1
+    l_checkd=0
+    r_checkd=0
+    dist+=1
+
+def r_chase():
+    global u_checkr, d_checkr, l_checkr, r_checkr, target_pos, red_pos, n_check, s_check, e_check, w_check, south, north, west, east, dist
+    #dist = 0
+
+    south = (red_pos[0]+1, red_pos[1]) in path_pos and d_checkr==0
+    east = (red_pos[0], red_pos[1]+1) in path_pos and r_checkr==0
+    west = (red_pos[0], red_pos[1]-1) in path_pos and l_checkr==0
+    north = (red_pos[0]-1, red_pos[1]) in path_pos and u_checkr==0
+    if (red_pos[0], red_pos[1])==(9,18):
+                redf.grid_configure(column=0)
+    if (red_pos[0], red_pos[1])==(9,0):
+                redf.grid_configure(column=18)
+
+    if  target_pos[0]>red_pos[0] and target_pos[1]>red_pos[1]:
+        print("SOUTH-EAST") 
+
+        if south:
+            south_func()
+        elif east:
+            east_func()
+        elif west:
+            west_func()
+        elif north:
+            north_func()
+
+    elif  target_pos[0]>red_pos[0] and target_pos[1]<red_pos[1]:
+        print("SOUTH-WEST")
+
+        if south:
+            south_func()
+        elif west:
+            west_func()
+        elif east:
+            east_func()
+        elif north:
+            north_func()
+
+    elif  target_pos[0]<red_pos[0] and target_pos[1]>red_pos[1]:
+        print("NORTH-EAST")
+        
+        if east:
+            east_func()
+        elif north:
+            north_func()
+        elif west:
+            west_func()
+        elif south:
+            south_func()
+        
+    elif  target_pos[0]<red_pos[0] and target_pos[1]<red_pos[1]:
+        print("NORTH-WEST")
+
+        if west:
+            west_func()
+        elif north:
+            north_func()
+        elif east:
+            east_func()
+        elif south:
+            south_func()
+
+    #target below red
+    elif target_pos[0]>red_pos[0] and target_pos[1]==red_pos[1]:  
+        print("SOUTH")  
+        
+        if south:
+            south_func()
+        elif east:
+            east_func()
+        elif west:
+            west_func()
+        elif north:
+            north_func()
+        
+    #target above red
+    if target_pos[0]<red_pos[0] and target_pos[1]==red_pos[1]:
+        print("NORTH")
+        
+        if north:
+            north_func()
+        elif east:
+            east_func()
+        elif west:
+            west_func()
+        elif south:
+            south_func()
+        
+    elif target_pos[1]>red_pos[1] and target_pos[0]==red_pos[0]:
+        print("EAST")
+
+        if east:
+            east_func()
+        elif north:
+            north_func()
+        elif south:
+            south_func()
+        elif west:
+            west_func()
+        
+    elif target_pos[1]<red_pos[1] and target_pos[0]==red_pos[0]:
+        print("WEST")
+        
+        if west:
+            west_func()
+        elif north:
+            north_func()
+        elif south:
+            south_func()
+        elif east:
+            east_func()
+        
+    elif target_pos==red_pos:
+        print("CHASE OVER")
+        
+    target_pos = (pacf.grid_info()["row"],pacf.grid_info()["column"])
+    red_pos = (redf.grid_info()["row"],redf.grid_info()["column"])
+    #print("RED: ",red_pos)
+    #print("TARGET: ",target_pos)
+    root.after(300, r_chase)
+    
+r_chase()
+
+def r_chased():
+    global u_checkd, d_checkd, l_checkd, r_checkd, target_var, red_var, dist, target_pos, red_pos
+    
+    south = (red_var[0]+1, red_var[1]) in path_pos and d_checkd==0
+    east = (red_var[0], red_var[1]+1) in path_pos and r_checkd==0
+    west = (red_var[0], red_var[1]-1) in path_pos and l_checkd==0
+    north = (red_var[0]-1, red_var[1]) in path_pos and u_checkd==0
+
+    '''
+    if (red_pos[0], red_pos[1])==(9,18):
+                redf.grid_configure(column=0)
+    if (red_pos[0], red_pos[1])==(9,0):
+                redf.grid_configure(column=18)
+    '''
+
+    if  target_var[0]>red_var[0] and target_var[1]>red_var[1]:
+        print("SOUTH-EAST") 
+
+        if south:
+            south_f()
+        elif east:
+            east_f()
+        elif west:
+            west_f()
+        elif north:
+            north_f()
+
+    elif  target_var[0]>red_var[0] and target_var[1]<red_var[1]:
+        print("SOUTH-WEST")
+
+        if south:
+            south_f()
+        elif west:
+            west_f()
+        elif east:
+            east_f()
+        elif north:
+            north_f()
+
+    elif  target_var[0]<red_var[0] and target_var[1]>red_var[1]:
+        print("NORTH-EAST")
+        
+        if east:
+            east_f()
+        elif north:
+            north_f()
+        elif west:
+            west_f()
+        elif south:
+            south_f()
+        
+    elif  target_var[0]<red_var[0] and target_var[1]<red_var[1]:
+        print("NORTH-WEST")
+
+        if west:
+            west_f()
+        elif north:
+            north_f()
+        elif east:
+            east_f()
+        elif south:
+            south_f()
+
+    #target below red
+    elif target_var[0]>red_var[0] and target_var[1]==red_var[1]:  
+        print("SOUTH")  
+        
+        if south:
+            south_f()
+        elif east:
+            east_f()
+        elif west:
+            west_f()
+        elif north:
+            north_f()
+        
+    #target above red
+    if target_var[0]<red_var[0] and target_var[1]==red_var[1]:
+        print("NORTH")
+        
+        if north:
+            north_f()
+        elif east:
+            east_f()
+        elif west:
+            west_f()
+        elif south:
+            south_f()
+        
+    elif target_var[1]>red_var[1] and target_var[0]==red_var[0]:
+        print("EAST")
+
+        if east:
+            east_f()
+        elif north:
+            north_f()
+        elif south:
+            south_f()
+        elif west:
+            west_f()
+        
+    elif target_var[1]<red_var[1] and target_var[0]==red_var[0]:
+        print("WEST")
+        
+        if west:
+            west_f()
+        elif north:
+            north_f()
+        elif south:
+            south_f()
+        elif east:
+            east_f()
+        
+    if target_var==red_var:
+        print("Distance: ", dist)
+    else:
+        root.after(1, r_chased)
+    target_pos = (pacf.grid_info()["row"],pacf.grid_info()["column"])
+    red_pos = (redf.grid_info()["row"],redf.grid_info()["column"])
+    #print("RED: ",red_pos)
+    #print("TARGET: ",target_pos)
+    
+    
+r_chased()
+
+root.bind("<Up>", up)
+root.bind("<Down>", down)
+root.bind("<Left>", left)
+root.bind("<Right>", right)
+
+root.mainloop()
