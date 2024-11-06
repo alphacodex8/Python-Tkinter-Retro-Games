@@ -1,0 +1,147 @@
+import tkinter as tk
+from tkinter import *
+import random
+from PIL import Image, ImageTk
+
+
+root = tk.Tk()
+score = 0
+root.title("Flappy Bird      Score: "+str(score))
+root.maxsize(335,415)
+root.minsize(335,415)
+root.configure(bg="light blue")
+
+#border
+for i in range(16):
+    border = Button(root, text="     ", bg="grey")
+    border.grid(row=i, column=0)
+    border = Button(root, text="     ", bg="grey")
+    border.grid(row=i, column=12)
+
+for i in range(13):
+    border = Button(root, text="     ", bg="grey")
+    border.grid(row=0, column=i)
+    border = Button(root, text="     ", bg="grey")
+    border.grid(row=15, column=i)
+
+image_path = "C:\\Users\\allen\\Downloads\\flappy_bird_fall.png"
+img = Image.open(image_path)
+
+image_path1 = "C:\\Users\\allen\\Downloads\\flappy_bird_fly.png"
+img1 = Image.open(image_path1)
+imgtk1 = img_tk = ImageTk.PhotoImage(img1)
+
+# Convert the image to PhotoImage format for Tkinter
+img_tk = ImageTk.PhotoImage(img)
+bird = Button(root, text="     ", bg="yellow", image=img_tk)
+bird.grid(row=1, column=4)
+
+r = 0
+fall_var = 0
+fly_var = 0
+t = 400
+
+def fall():
+    global r, t
+    bird.configure(image=img_tk)
+    t = 400
+    if fall_var==0 and bird.grid_info()["row"]+1!=15:
+        r+=1
+        if t>10:
+            t-=0.6*t
+        bird.grid_configure(row=r, column=4)
+        root.after(int(t), fall)
+fall()
+
+def fly(event):
+    global fall_var, fly_var, r, t, imgtk1
+    bird.configure(image=imgtk1)
+    fall_var=1
+    if fly_var==0:
+        fly_var=1
+        t=90
+        
+        def flying():
+            global r, t, fall_var, fly_var
+            r-=1
+            t+=0.6*t
+            bird.grid_configure(row=r, column=4)
+            if round(t)<600 and bird.grid_info()["row"]>0:
+                root.after(int(t), flying)
+            else:
+                fly_var=0
+                fall_var=0
+                fall()
+        flying()
+
+def obstacles():
+    global c_o, score
+    obstacle_lst = [1,2,3,4,5,6,7,8,9]
+    live_u = []
+    live_d = []
+    h = random.choice(obstacle_lst)
+
+    def check():
+        global score
+        check_var=0
+        if live_u[0].grid_info()["column"]==4:
+            for i in range(len(live_u)):
+                if bird.grid_info()==live_u[i].grid_info():
+                    print("Lose")
+                    score=0
+                else:
+                    check_var+=1
+
+            for i in range(len(live_d)):
+                if bird.grid_info()==live_d[i].grid_info():
+                    print("Lose")
+                    score=0
+                else:
+                    check_var+=1
+            if check_var==10:
+                score+=1
+                root.title("Flappy Bird      Score: "+str(score))
+                check_var=0
+            else:
+                score=0
+                root.title("Flappy Bird      Score: "+str(score))
+
+    for i in range(h):
+        obstacle_u = Button(root, text="     ", bg="green")
+        obstacle_u.grid(row=1+i, column=11)
+        live_u.append(obstacle_u)
+
+    for i in range(10-h):
+        obstacle_d = Button(root, text="     ", bg="green")
+        obstacle_d.grid(row=h+i+5, column=11)
+        live_d.append(obstacle_d)
+    
+    c_o = 11
+    
+    def motion():
+        global c_o
+        check()
+        if c_o!=0:
+            for i in range(len(live_u)):
+                live_u[i].grid_configure(row=live_u[i].grid_info()["row"], column=c_o)
+            for i in range(len(live_d)):
+                live_d[i].grid_configure(row=live_d[i].grid_info()["row"], column=c_o)
+            c_o-=1
+            root.after(100, motion)
+
+        else:
+            for i in range(len(live_u)):
+                live_u[i].destroy()
+            live_u.clear()
+            for i in range(len(live_d)):
+                live_d[i].destroy()
+            live_d.clear()
+            obstacles()
+            
+    motion()      
+    
+obstacles()
+
+root.bind("<space>", fly)
+
+root.mainloop()
